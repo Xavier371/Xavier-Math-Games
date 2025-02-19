@@ -3,8 +3,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const ctx = canvas.getContext('2d');
     const isMobile = window.innerWidth <= 768;
 
+    let origin, width, height;
+
     function resizeCanvas() {
-        const isMobile = window.innerWidth <= 768;
         if (isMobile) {
             const containerWidth = Math.min(window.innerWidth - 40, window.innerHeight - 300);
             canvas.width = containerWidth;
@@ -14,20 +15,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
             canvas.height = 600;
         }
         
-        // Force redraw after resize
-        if (typeof origin !== 'undefined') {
-            origin.x = canvas.width / 2;
-            origin.y = canvas.height / 2;
+        // Update dimensions after resize
+        origin = { x: canvas.width / 2, y: canvas.height / 2 };
+        width = canvas.width;
+        height = canvas.height;
+        
+        // Redraw if game is initialized
+        if (typeof draw === 'function') {
             draw();
         }
     }
 
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
-
-    const origin = { x: canvas.width / 2, y: canvas.height / 2 };
-    const width = canvas.width;
-    const height = canvas.height;
 
     // Scale factor for mobile
     const scaleFactor = isMobile ? 0.6 : 1;
@@ -46,11 +46,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let elapsedTime = 0;
     let isPaused = false;
     let solveClicked = false;
-
-    // Initialize with a draw call
-    drawGrid();
-    drawAxes();
-    draw();
 
     function getRandomPoint() {
         const min = -5;
@@ -116,22 +111,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
             y: Math.round((origin.y - point.y) / baseVectorLength) 
         };
     }
-
-    function drawGrid() {
+        function drawGrid() {
         ctx.clearRect(0, 0, width, height);
         ctx.strokeStyle = 'lightgray';
         const gridSize = baseVectorLength;
 
-        for (let i = -width / 2; i <= width / 2; i += gridSize) {
+        for (let i = -Math.ceil(width / (2 * gridSize)); i <= Math.ceil(width / (2 * gridSize)); i++) {
             ctx.beginPath();
-            ctx.moveTo(origin.x + i, 0);
-            ctx.lineTo(origin.x + i, height);
+            ctx.moveTo(origin.x + i * gridSize, 0);
+            ctx.lineTo(origin.x + i * gridSize, height);
             ctx.stroke();
         }
-        for (let j = -height / 2; j <= height / 2; j += gridSize) {
+
+        for (let j = -Math.ceil(height / (2 * gridSize)); j <= Math.ceil(height / (2 * gridSize)); j++) {
             ctx.beginPath();
-            ctx.moveTo(0, origin.y - j);
-            ctx.lineTo(width, origin.y - j);
+            ctx.moveTo(0, origin.y + j * gridSize);
+            ctx.lineTo(width, origin.y + j * gridSize);
             ctx.stroke();
         }
     }
@@ -188,6 +183,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function drawPoints() {
         const pointRadius = isMobile ? 3 : 5;
+        
         let redCanvasPoint = gridToCanvas(redPoint);
         ctx.beginPath();
         ctx.arc(redCanvasPoint.x, redCanvasPoint.y, pointRadius, 0, Math.PI * 2);
@@ -217,8 +213,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const transformedBlueCanvasPoint = gridToCanvas(transformedBluePoint);
         const pointRadius = isMobile ? 3 : 5;
         ctx.beginPath();
-        ctx.arc(transformedBlueCanvasPoint.x, transformedBlueCanvasPoint.y, 
-                pointRadius, 0, Math.PI * 2);
+        ctx.arc(transformedBlueCanvasPoint.x, transformedBlueCanvasPoint.y, pointRadius, 0, Math.PI * 2);
         ctx.fillStyle = 'lightblue';
         ctx.fill();
 
@@ -351,28 +346,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         timer = null;
     }
 
-    function toggleSolution() {
-        const equationContainer = document.getElementById('equationContainer');
-        if (isMobile) {
-            if (equationContainer.style.display === 'none') {
-                canvas.style.display = 'none';
-                updateEquationText();
-                equationContainer.style.display = 'block';
-            } else {
-                canvas.style.display = 'block';
-                equationContainer.style.display = 'none';
-                draw();
-            }
-        } else {
-            if (equationContainer.style.display === 'none') {
-                updateEquationText();
-                equationContainer.style.display = 'block';
-            } else {
-                equationContainer.style.display = 'none';
-            }
-        }
-    }
-
     function updateEquationText() {
         const equationText = `
             \\[
@@ -424,6 +397,28 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('vectorMapping').innerHTML = vectorMapping;
 
         MathJax.typeset();
+    }
+
+    function toggleSolution() {
+        const equationContainer = document.getElementById('equationContainer');
+        if (isMobile) {
+            if (equationContainer.style.display === 'none') {
+                canvas.style.display = 'none';
+                updateEquationText();
+                equationContainer.style.display = 'block';
+            } else {
+                canvas.style.display = 'block';
+                equationContainer.style.display = 'none';
+                draw();
+            }
+        } else {
+            if (equationContainer.style.display === 'none') {
+                updateEquationText();
+                equationContainer.style.display = 'block';
+            } else {
+                equationContainer.style.display = 'none';
+            }
+        }
     }
 
     function disableButtonsAfterWin() {
@@ -505,6 +500,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
+    // Initial draw and start timer
     draw();
     startTimer();
 });
