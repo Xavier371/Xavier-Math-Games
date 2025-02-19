@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Transformation</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Transformation</h1>
+        <p>Drag and drop the green arrows so that the blue point falls on the red</p>
+        <p>Moves: <span id="moveCounter">0</span></p>
+        <p id="winMessage"></p>
+        <p id="timer">Timer: 0 seconds</p>
+        <div class="button-container">
+            <button id="goButton">Go</button>
+            <button id="resetButton">Reset</button>
+            <button id="pauseButton">Pause</button>
+            <button id="solveButton">Solve</button>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+        <!-- Mathematical Equation -->
+        <div class="equation" id="equationContainer">
+            <p id="equation"></p>
+            <p id="equationText"></p>
+            <p id="solutionText"></p>
+            <p id="vectorMapping"></p>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
