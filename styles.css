@@ -30,6 +30,8 @@ body {
 canvas {
     border: 1px solid black;
     background: white;
+    width: 600px;
+    height: 600px;
 }
 
 .button-container {
@@ -96,6 +98,17 @@ button:disabled {
 
     canvas {
         width: 100%;
+        max-width: 400px;
         height: auto;
+        aspect-ratio: 1;
+        border: 1px solid black;
+        background: white;
+    }
+
+    .game-area {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 10px;
     }
 }
