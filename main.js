@@ -3,19 +3,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const ctx = canvas.getContext('2d');
     const isMobile = window.innerWidth <= 768;
 
-     function resizeCanvas() {
+    function resizeCanvas() {
         const isMobile = window.innerWidth <= 768;
         if (isMobile) {
             const containerWidth = Math.min(window.innerWidth - 40, window.innerHeight - 300);
             canvas.width = containerWidth;
             canvas.height = containerWidth;
         } else {
-            canvas.width = 600;  // Fixed size for desktop
+            canvas.width = 600;
             canvas.height = 600;
         }
-        // Recalculate origin after resize
-        origin.x = canvas.width / 2;
-        origin.y = canvas.height / 2;
+        
+        // Force redraw after resize
+        if (typeof origin !== 'undefined') {
+            origin.x = canvas.width / 2;
+            origin.y = canvas.height / 2;
+            draw();
+        }
     }
 
     window.addEventListener('resize', resizeCanvas);
@@ -43,16 +47,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let isPaused = false;
     let solveClicked = false;
 
+    // Initialize with a draw call
+    drawGrid();
+    drawAxes();
+    draw();
+
     function getRandomPoint() {
         const min = -5;
         const max = 5;
         let x, y;
-
         do {
             x = Math.floor(Math.random() * (max - min + 1)) + min;
             y = Math.floor(Math.random() * (max - min + 1)) + min;
         } while ((x === 1 && y === 0) || (x === 0 && y === 1));
-
         return { x: x, y: y };
     }
 
@@ -110,7 +117,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         };
     }
 
-                              function drawGrid() {
+    function drawGrid() {
         ctx.clearRect(0, 0, width, height);
         ctx.strokeStyle = 'lightgray';
         const gridSize = baseVectorLength;
