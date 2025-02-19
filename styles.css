@@ -7,133 +7,47 @@ body {
 }
 
 .container {
-    width: 100%;
-    height: 100vh;
+    display: flex;
     padding: 20px;
+    gap: 20px;
+    height: 100vh;
     box-sizing: border-box;
 }
 
-/* Mobile styles */
-@media (max-width: 768px) {
-    .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .game-controls {
-        width: 100%;
-        text-align: center;
-    }
-
-    h1 {
-        font-size: 1.5rem;
-        margin: 10px 0;
-    }
-
-    p {
-        font-size: 0.9rem;
-        margin: 5px 0;
-    }
-
-    .button-container {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin: 10px 0;
-    }
-
-    button {
-        padding: 8px 15px;
-        font-size: 0.9rem;
-    }
-
-    .game-area {
-        width: 100%;
-        aspect-ratio: 1;
-        position: relative;
-    }
-
-    canvas {
-        width: 100%;
-        height: 100%;
-        border: 1px solid black;
-    }
-
-    .equation {
-        display: none;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        padding: 20px;
-        width: 90%;
-        text-align: center;
-    }
+.game-controls {
+    flex: 0 0 300px;
+    padding: 20px;
 }
 
-/* Desktop styles */
-@media (min-width: 769px) {
-    .container {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        padding: 40px;
-    }
+.game-area {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    .game-controls {
-        width: 30%;
-        padding-right: 20px;
-    }
+canvas {
+    border: 1px solid black;
+    background: white;
+}
 
-    .game-area {
-        width: 60%;
-        aspect-ratio: 1;
-        position: relative;
-    }
-
-    canvas {
-        width: 100%;
-        height: 100%;
-        border: 1px solid black;
-    }
-
-    .equation {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        padding: 30px;
-        width: 50%;
-        text-align: center;
-        box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
-
-    button {
-        width: 100px;
-        padding: 10px;
-        margin: 5px;
-        font-size: 16px;
-    }
-
-    .button-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 20px;
 }
 
 button {
+    width: 120px;
+    padding: 10px;
+    font-size: 16px;
     cursor: pointer;
-    border: none;
     background-color: #4CAF50;
     color: white;
+    border: none;
     border-radius: 5px;
-    transition: background-color 0.3s;
 }
 
 button:hover {
@@ -142,5 +56,46 @@ button:hover {
 
 button:disabled {
     background-color: #cccccc;
-    cursor: not-allowed;
+}
+
+.equation {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .game-controls {
+        flex: none;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .button-container {
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        margin: 10px 0;
+    }
+
+    button {
+        width: auto;
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    canvas {
+        width: 100%;
+        height: auto;
+    }
 }
