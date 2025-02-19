@@ -3,20 +3,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const ctx = canvas.getContext('2d');
     const isMobile = window.innerWidth <= 768;
 
-    function resizeCanvas() {
+     function resizeCanvas() {
+        const isMobile = window.innerWidth <= 768;
         if (isMobile) {
-            const containerWidth = canvas.parentElement.clientWidth;
+            const containerWidth = Math.min(window.innerWidth - 40, window.innerHeight - 300);
             canvas.width = containerWidth;
             canvas.height = containerWidth;
         } else {
-            canvas.width = canvas.clientWidth;
-            canvas.height = canvas.clientHeight;
+            canvas.width = 600;  // Fixed size for desktop
+            canvas.height = 600;
         }
-        
-        // Recalculate origin and redraw after resize
+        // Recalculate origin after resize
         origin.x = canvas.width / 2;
         origin.y = canvas.height / 2;
-        draw();
     }
 
     window.addEventListener('resize', resizeCanvas);
