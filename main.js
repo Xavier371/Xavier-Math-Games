@@ -1,24 +1,11 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-    canvas.style.touchAction = 'none';
-
-    // Responsive canvas sizing
-    function resizeCanvas() {
-        const container = canvas.parentElement;
-        const size = Math.min(container.clientWidth, container.clientHeight);
-        canvas.width = size;
-        canvas.height = size;
-        origin = { x: canvas.width / 2, y: canvas.height / 2 };
-        unitSize = Math.min(canvas.width, canvas.height) / 20;
-        if (gameStarted && !isPaused) {
-            draw();
-        }
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
+    
+    // Set fixed canvas size
+    canvas.width = 600;
+    canvas.height = 600;
+    
     // Game state variables
     let origin = { x: canvas.width / 2, y: canvas.height / 2 };
     let unitSize = Math.min(canvas.width, canvas.height) / 20;
@@ -38,7 +25,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let isShowingInstructions = false;
     let isShowingSolution = false;
 
-        function getRandomPoint() {
+    // Point generation functions
+    function getRandomPoint() {
         const min = -5;
         const max = 5;
         let x, y;
@@ -49,7 +37,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return { x, y };
     }
 
-    function hasIntegerSolution(bluePoint, redPoint) {
+                              function hasIntegerSolution(bluePoint, redPoint) {
         const [b1, b2] = [bluePoint.x, bluePoint.y];
         const [r1, r2] = [redPoint.x, redPoint.y];
         let bestSolution = null;
@@ -86,7 +74,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     let { bluePoint, redPoint, solution } = generateValidPoints();
-        function gridToCanvas(point) {
+
+    // Coordinate conversion functions
+    function gridToCanvas(point) {
         return {
             x: origin.x + point.x * unitSize,
             y: origin.y - point.y * unitSize
@@ -100,19 +90,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
         };
     }
 
+                              // Drawing functions
     function drawGrid() {
-        if (isShowingInstructions || isShowingSolution) return;
-        
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.strokeStyle = 'lightgray';
-        
+
+        // Draw grid lines
         for (let i = -10; i <= 10; i++) {
             const linePos = i * unitSize;
+            
+            // Vertical lines
             ctx.beginPath();
             ctx.moveTo(origin.x + linePos, 0);
             ctx.lineTo(origin.x + linePos, canvas.height);
             ctx.stroke();
 
+            // Horizontal lines
             ctx.beginPath();
             ctx.moveTo(0, origin.y + linePos);
             ctx.lineTo(canvas.width, origin.y + linePos);
@@ -123,28 +116,33 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function drawAxes() {
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 2;
-        
+
+        // X-axis
         ctx.beginPath();
         ctx.moveTo(0, origin.y);
         ctx.lineTo(canvas.width, origin.y);
         ctx.stroke();
 
+        // Y-axis
         ctx.beginPath();
         ctx.moveTo(origin.x, 0);
         ctx.lineTo(origin.x, canvas.height);
         ctx.stroke();
 
+        // Labels
         ctx.font = '16px Arial';
         ctx.fillStyle = 'black';
         ctx.fillText('X', canvas.width - 20, origin.y - 10);
         ctx.fillText('Y', origin.x + 10, 20);
     }
-        function drawArrow(start, end, color, label = '') {
+
+    function drawArrow(start, end, color, label = '') {
         const headLength = unitSize / 5;
         const dx = end.x - start.x;
         const dy = end.y - start.y;
         const angle = Math.atan2(dy, dx);
 
+        // Draw line
         ctx.beginPath();
         ctx.moveTo(start.x, start.y);
         ctx.lineTo(end.x, end.y);
@@ -152,6 +150,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         ctx.lineWidth = 2;
         ctx.stroke();
 
+        // Draw arrowhead
         ctx.beginPath();
         ctx.moveTo(end.x, end.y);
         ctx.lineTo(
@@ -166,6 +165,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         ctx.fillStyle = color;
         ctx.fill();
 
+        // Add label
         if (label) {
             ctx.font = '16px Arial';
             ctx.fillStyle = color;
@@ -173,13 +173,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
-    function drawPoints() {
+                              function drawPoints() {
+        // Draw red target point
         const redCanvasPoint = gridToCanvas(redPoint);
         ctx.beginPath();
         ctx.arc(redCanvasPoint.x, redCanvasPoint.y, unitSize/10, 0, Math.PI * 2);
         ctx.fillStyle = 'red';
         ctx.fill();
 
+        // Draw blue starting point
         const blueCanvasPoint = gridToCanvas(bluePoint);
         ctx.beginPath();
         ctx.arc(blueCanvasPoint.x, blueCanvasPoint.y, unitSize/10, 0, Math.PI * 2);
@@ -209,21 +211,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
         drawArrow(origin, transformedBlueCanvasPoint, 'lightblue');
         checkWinCondition(transformedBluePoint);
     }
-        function checkWinCondition(transformedPoint) {
-        if (Math.round(transformedPoint.x) === redPoint.x && 
-            Math.round(transformedPoint.y) === redPoint.y) {
-            gameWon = true;
-            stopTimer();
-            document.getElementById('winMessage').innerText = 
-                `Congratulations! You won in ${moveCounter} moves and ${elapsedTime} seconds!`;
-            disableButtonsAfterWin();
-        }
-    }
 
     function draw() {
         if (isShowingInstructions || isShowingSolution) return;
         drawGrid();
         drawAxes();
+        
+        // Draw original basis vectors
         drawArrow(origin, 
                  { x: origin.x + initialUnitVectorX.x, y: origin.y + initialUnitVectorX.y }, 
                  'black', 'i');
@@ -231,6 +225,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                  { x: origin.x + initialUnitVectorY.x, y: origin.y + initialUnitVectorY.y }, 
                  'black', 'j');
 
+        // Draw transformed basis vectors
         const labelIX = (unitVectorX.x !== initialUnitVectorX.x || 
                         unitVectorX.y !== initialUnitVectorX.y) ? "i'" : '';
         const labelJY = (unitVectorY.x !== initialUnitVectorY.x || 
@@ -243,6 +238,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
                  { x: origin.x + unitVectorY.x, y: origin.y + unitVectorY.y }, 
                  'green', labelJY);
         drawPoints();
+    }
+        function isOnVector(point, vector) {
+        const vectorPoint = { x: origin.x + vector.x, y: origin.y + vector.y };
+        const distance = Math.sqrt(
+            (point.x - vectorPoint.x) ** 2 + 
+            (point.y - vectorPoint.y) ** 2
+        );
+        return distance < unitSize/5;
     }
 
     function handlePointerMove(event) {
@@ -268,17 +271,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             } else if (dragging === 'unitVectorY') {
                 unitVectorY = { x: snappedX, y: snappedY };
             }
-
             draw();
         }
-    }
-        function isOnVector(point, vector) {
-        const vectorPoint = { x: origin.x + vector.x, y: origin.y + vector.y };
-        const distance = Math.sqrt(
-            (point.x - vectorPoint.x) ** 2 + 
-            (point.y - vectorPoint.y) ** 2
-        );
-        return distance < unitSize/5;
     }
 
     function handlePointerStart(event) {
@@ -311,13 +305,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Event Listeners
     canvas.addEventListener('mousedown', handlePointerStart);
-    canvas.addEventListener('touchstart', handlePointerStart);
+    canvas.addEventListener('touchstart', handlePointerStart, { passive: false });
     canvas.addEventListener('mousemove', handlePointerMove);
-    canvas.addEventListener('touchmove', handlePointerMove);
+    canvas.addEventListener('touchmove', handlePointerMove, { passive: false });
     canvas.addEventListener('mouseup', handlePointerEnd);
     canvas.addEventListener('touchend', handlePointerEnd);
 
-    // Timer Functions
+                              function checkWinCondition(transformedPoint) {
+        if (Math.round(transformedPoint.x) === redPoint.x && 
+            Math.round(transformedPoint.y) === redPoint.y) {
+            gameWon = true;
+            stopTimer();
+            document.getElementById('winMessage').innerText = 
+                `Congratulations! You won in ${moveCounter} moves and ${elapsedTime} seconds!`;
+            disableButtonsAfterWin();
+        }
+    }
+
     function startTimer() {
         if (!timer) {
             timer = setInterval(() => {
@@ -334,16 +338,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         timer = null;
     }
 
-    // Button Event Handlers
-    document.getElementById('howToPlayButton').addEventListener('click', toggleInstructions);
-    document.getElementById('backToGameButton').addEventListener('click', toggleInstructions);
-    document.getElementById('solveButton').addEventListener('click', toggleSolution);
-    document.getElementById('backFromSolutionButton').addEventListener('click', toggleSolution);
-
     function toggleInstructions() {
         isShowingInstructions = !isShowingInstructions;
-        const overlay = document.getElementById('instructionsOverlay');
-        overlay.style.display = isShowingInstructions ? 'flex' : 'none';
+        document.getElementById('instructionsOverlay').style.display = 
+            isShowingInstructions ? 'block' : 'none';
         if (!isShowingInstructions) {
             draw();
         }
@@ -352,10 +350,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function toggleSolution() {
         isShowingSolution = !isShowingSolution;
         const overlay = document.getElementById('solutionOverlay');
+        
         if (isShowingSolution) {
             isPaused = true;
-            const solutionContent = document.getElementById('solutionContent');
-            solutionContent.innerHTML = `
+            document.getElementById('solutionContent').innerHTML = `
                 <h2>Solution</h2>
                 <p>The transformation matrix is:</p>
                 \\[ \\begin{bmatrix} ${solution.a} & ${solution.b} \\\\ ${solution.c} & ${solution.d} \\end{bmatrix} \\]
@@ -368,8 +366,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
             isPaused = false;
             draw();
         }
-        overlay.style.display = isShowingSolution ? 'flex' : 'none';
+        
+        overlay.style.display = isShowingSolution ? 'block' : 'none';
     }
+
+                              // Button Event Handlers
+    document.getElementById('howToPlayButton').addEventListener('click', toggleInstructions);
+    document.getElementById('backToGameButton').addEventListener('click', toggleInstructions);
+    document.getElementById('solveButton').addEventListener('click', toggleSolution);
+    document.getElementById('backFromSolutionButton').addEventListener('click', toggleSolution);
 
     document.getElementById('goButton').addEventListener('click', () => {
         if (gameWon || isShowingInstructions || isShowingSolution) return;
@@ -388,6 +393,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         bluePoint = points.bluePoint;
         redPoint = points.redPoint;
         solution = points.solution;
+        
         unitVectorX = { ...initialUnitVectorX };
         unitVectorY = { ...initialUnitVectorY };
         moveCounter = 0;
@@ -419,8 +425,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function togglePause() {
         if (gameWon) return;
+        
         isPaused = !isPaused;
         document.getElementById('pauseButton').innerText = isPaused ? 'Resume' : 'Pause';
+        
         if (isPaused) {
             stopTimer();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -436,6 +444,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('goButton').disabled = true;
         document.getElementById('pauseButton').disabled = true;
     }
+
+    // Prevent default touch behaviors
+    document.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+    document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
 
     // Initialize game
     draw();
