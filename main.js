@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    // CRITICAL: Set these exact dimensions and values
+    // Set fixed canvas size
     canvas.width = 600;
     canvas.height = 600;
     const width = canvas.width;
@@ -10,18 +10,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const baseVectorLength = 50;
     let origin = { x: width / 2, y: height / 2 };
 
-    // Initialize vectors with baseVectorLength
+    // Initialize vectors
     const initialUnitVectorX = { x: baseVectorLength, y: 0 };
     const initialUnitVectorY = { x: 0, y: -baseVectorLength };
     let unitVectorX = { ...initialUnitVectorX };
     let unitVectorY = { ...initialUnitVectorY };
 
-    // Add this CSS directly to the canvas
-    canvas.style.border = '1px solid black';
-    canvas.style.width = '600px';
-    canvas.style.height = '600px';
-
-    // Control variables
+    // Game state variables
     let dragging = null;
     let moveCounter = 0;
     let gameWon = false;
@@ -44,7 +39,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return { x, y };
     }
 
-                              function hasIntegerSolution(bluePoint, redPoint) {
+    function hasIntegerSolution(bluePoint, redPoint) {
         const [b1, b2] = [bluePoint.x, bluePoint.y];
         const [r1, r2] = [redPoint.x, redPoint.y];
         let bestSolution = null;
@@ -70,7 +65,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return bestSolution;
     }
 
-    function generateValidPoints() {
+                              function generateValidPoints() {
         let bluePoint, redPoint, solution;
         do {
             bluePoint = getRandomPoint();
@@ -89,7 +84,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             y: origin.y - point.y * baseVectorLength
         };
     }
-    
+
     function canvasToGrid(point) {
         return {
             x: Math.round((point.x - origin.x) / baseVectorLength),
@@ -97,7 +92,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         };
     }
 
-                              // Drawing functions
+    // Drawing functions
     function drawGrid() {
         ctx.clearRect(0, 0, width, height);
         ctx.strokeStyle = 'lightgray';
@@ -109,7 +104,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             ctx.lineTo(origin.x + i * baseVectorLength, height);
             ctx.stroke();
         }
-    
+
         for (let j = -Math.ceil(height / (2 * baseVectorLength)); j <= Math.ceil(height / (2 * baseVectorLength)); j++) {
             ctx.beginPath();
             ctx.moveTo(0, origin.y + j * baseVectorLength);
@@ -117,6 +112,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             ctx.stroke();
         }
     }
+
     function drawAxes() {
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 2;
@@ -124,24 +120,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
         // X-axis
         ctx.beginPath();
         ctx.moveTo(0, origin.y);
-        ctx.lineTo(canvas.width, origin.y);
+        ctx.lineTo(width, origin.y);
         ctx.stroke();
 
         // Y-axis
         ctx.beginPath();
         ctx.moveTo(origin.x, 0);
-        ctx.lineTo(origin.x, canvas.height);
+        ctx.lineTo(origin.x, height);
         ctx.stroke();
 
         // Labels
         ctx.font = '16px Arial';
         ctx.fillStyle = 'black';
-        ctx.fillText('X', canvas.width - 20, origin.y - 10);
+        ctx.fillText('X', width - 20, origin.y - 10);
         ctx.fillText('Y', origin.x + 10, 20);
     }
 
     function drawArrow(start, end, color, label = '') {
-        const headLength = unitSize / 5;
+        const headLength = baseVectorLength / 5;
         const dx = end.x - start.x;
         const dy = end.y - start.y;
         const angle = Math.atan2(dy, dx);
@@ -181,14 +177,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
         // Draw red target point
         const redCanvasPoint = gridToCanvas(redPoint);
         ctx.beginPath();
-        ctx.arc(redCanvasPoint.x, redCanvasPoint.y, unitSize/10, 0, Math.PI * 2);
+        ctx.arc(redCanvasPoint.x, redCanvasPoint.y, baseVectorLength/10, 0, Math.PI * 2);
         ctx.fillStyle = 'red';
         ctx.fill();
 
         // Draw blue starting point
         const blueCanvasPoint = gridToCanvas(bluePoint);
         ctx.beginPath();
-        ctx.arc(blueCanvasPoint.x, blueCanvasPoint.y, unitSize/10, 0, Math.PI * 2);
+        ctx.arc(blueCanvasPoint.x, blueCanvasPoint.y, baseVectorLength/10, 0, Math.PI * 2);
         ctx.fillStyle = 'blue';
         ctx.fill();
 
@@ -197,8 +193,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function drawTransformedVector() {
         const A = [
-            [(unitVectorX.x / unitSize), (unitVectorY.x / unitSize)],
-            [(-unitVectorX.y / unitSize), (-unitVectorY.y / unitSize)]
+            [(unitVectorX.x / baseVectorLength), (unitVectorY.x / baseVectorLength)],
+            [(-unitVectorX.y / baseVectorLength), (-unitVectorY.y / baseVectorLength)]
         ];
 
         const transformedBluePoint = {
@@ -208,7 +204,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         const transformedBlueCanvasPoint = gridToCanvas(transformedBluePoint);
         ctx.beginPath();
-        ctx.arc(transformedBlueCanvasPoint.x, transformedBlueCanvasPoint.y, unitSize/10, 0, Math.PI * 2);
+        ctx.arc(transformedBlueCanvasPoint.x, transformedBlueCanvasPoint.y, baseVectorLength/10, 0, Math.PI * 2);
         ctx.fillStyle = 'lightblue';
         ctx.fill();
 
@@ -218,6 +214,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function draw() {
         if (isShowingInstructions || isShowingSolution) return;
+        
         drawGrid();
         drawAxes();
         
@@ -241,44 +238,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
         drawArrow(origin, 
                  { x: origin.x + unitVectorY.x, y: origin.y + unitVectorY.y }, 
                  'green', labelJY);
+        
         drawPoints();
     }
-        function isOnVector(point, vector) {
+
+    function isOnVector(point, vector) {
         const vectorPoint = { x: origin.x + vector.x, y: origin.y + vector.y };
         const distance = Math.sqrt(
             (point.x - vectorPoint.x) ** 2 + 
             (point.y - vectorPoint.y) ** 2
         );
-        return distance < unitSize/5;
+        return distance < baseVectorLength/5;
     }
 
-    function handlePointerMove(event) {
-        event.preventDefault();
-        if (dragging && !isPaused) {
-            const rect = canvas.getBoundingClientRect();
-            let x, y;
-            
-            if (event.type === 'touchmove') {
-                x = event.touches[0].clientX - rect.left;
-                y = event.touches[0].clientY - rect.top;
-            } else {
-                x = event.clientX - rect.left;
-                y = event.clientY - rect.top;
-            }
-
-            const gridPoint = canvasToGrid({ x, y });
-            const snappedX = Math.round(gridPoint.x) * unitSize;
-            const snappedY = Math.round(gridPoint.y) * -unitSize;
-
-            if (dragging === 'unitVectorX') {
-                unitVectorX = { x: snappedX, y: snappedY };
-            } else if (dragging === 'unitVectorY') {
-                unitVectorY = { x: snappedX, y: snappedY };
-            }
-            draw();
-        }
-    }
-
+                              // Event handlers for both mouse and touch
     function handlePointerStart(event) {
         event.preventDefault();
         if (gameWon || isPaused) return;
@@ -303,11 +276,38 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
+    function handlePointerMove(event) {
+        event.preventDefault();
+        if (dragging && !isPaused) {
+            const rect = canvas.getBoundingClientRect();
+            let x, y;
+            
+            if (event.type === 'touchmove') {
+                x = event.touches[0].clientX - rect.left;
+                y = event.touches[0].clientY - rect.top;
+            } else {
+                x = event.clientX - rect.left;
+                y = event.clientY - rect.top;
+            }
+
+            const gridPoint = canvasToGrid({ x, y });
+            const snappedX = Math.round(gridPoint.x) * baseVectorLength;
+            const snappedY = Math.round(gridPoint.y) * -baseVectorLength;
+
+            if (dragging === 'unitVectorX') {
+                unitVectorX = { x: snappedX, y: snappedY };
+            } else if (dragging === 'unitVectorY') {
+                unitVectorY = { x: snappedX, y: snappedY };
+            }
+            draw();
+        }
+    }
+
     function handlePointerEnd() {
         dragging = null;
     }
 
-    // Event Listeners
+    // Add event listeners for both mouse and touch
     canvas.addEventListener('mousedown', handlePointerStart);
     canvas.addEventListener('touchstart', handlePointerStart, { passive: false });
     canvas.addEventListener('mousemove', handlePointerMove);
@@ -315,7 +315,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     canvas.addEventListener('mouseup', handlePointerEnd);
     canvas.addEventListener('touchend', handlePointerEnd);
 
-                              function checkWinCondition(transformedPoint) {
+    // Game control functions
+    function checkWinCondition(transformedPoint) {
         if (Math.round(transformedPoint.x) === redPoint.x && 
             Math.round(transformedPoint.y) === redPoint.y) {
             gameWon = true;
@@ -342,11 +343,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
         timer = null;
     }
 
+                              // Overlay control functions
     function toggleInstructions() {
         isShowingInstructions = !isShowingInstructions;
-        document.getElementById('instructionsOverlay').style.display = 
-            isShowingInstructions ? 'block' : 'none';
-        if (!isShowingInstructions) {
+        const overlay = document.getElementById('instructionsOverlay');
+        overlay.style.display = isShowingInstructions ? 'block' : 'none';
+        
+        if (isShowingInstructions) {
+            isPaused = true;
+        } else {
+            isPaused = false;
             draw();
         }
     }
@@ -357,14 +363,45 @@ document.addEventListener('DOMContentLoaded', (event) => {
         
         if (isShowingSolution) {
             isPaused = true;
-            document.getElementById('solutionContent').innerHTML = `
-                <h2>Solution</h2>
-                <p>The transformation matrix is:</p>
-                \\[ \\begin{bmatrix} ${solution.a} & ${solution.b} \\\\ ${solution.c} & ${solution.d} \\end{bmatrix} \\]
-                <p>This means:</p>
-                <p>i' maps to (${solution.a}, ${solution.c})</p>
-                <p>j' maps to (${solution.b}, ${solution.d})</p>
+            // Update solution display with MathJax formatting
+            const equationText = `
+                \\[
+                \\begin{bmatrix}
+                ${solution.a} & ${solution.b} \\\\
+                ${solution.c} & ${solution.d} \\\\
+                \\end{bmatrix}
+                \\begin{bmatrix}
+                ${bluePoint.x} \\\\
+                ${bluePoint.y} \\\\
+                \\end{bmatrix}
+                =
+                \\begin{bmatrix}
+                ${redPoint.x} \\\\
+                ${redPoint.y} \\\\
+                \\end{bmatrix}
+                \\]
             `;
+
+            const systemText = `
+                \\[
+                \\begin{aligned}
+                ${solution.a}(${bluePoint.x}) + ${solution.b}(${bluePoint.y}) &= ${redPoint.x} \\\\
+                ${solution.c}(${bluePoint.x}) + ${solution.d}(${bluePoint.y}) &= ${redPoint.y}
+                \\end{aligned}
+                \\]
+            `;
+
+            const vectorText = `
+                \\[
+                \\text{Basis vectors: } i' = (${solution.a}, ${solution.c}), \\; j' = (${solution.b}, ${solution.d})
+                \\]
+            `;
+
+            document.getElementById('equation').innerHTML = equationText;
+            document.getElementById('equationText').innerHTML = systemText;
+            document.getElementById('vectorMapping').innerHTML = vectorText;
+            
+            // Trigger MathJax to process the new content
             MathJax.typeset();
         } else {
             isPaused = false;
@@ -373,59 +410,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         
         overlay.style.display = isShowingSolution ? 'block' : 'none';
     }
-
-                              // Button Event Handlers
-    document.getElementById('howToPlayButton').addEventListener('click', toggleInstructions);
-    document.getElementById('backToGameButton').addEventListener('click', toggleInstructions);
-    document.getElementById('solveButton').addEventListener('click', toggleSolution);
-    document.getElementById('backFromSolutionButton').addEventListener('click', toggleSolution);
-
-    document.getElementById('goButton').addEventListener('click', () => {
-        if (gameWon || isShowingInstructions || isShowingSolution) return;
-        if (!gameStarted) {
-            gameStarted = true;
-            draw();
-            startTimer();
-        }
-        moveCounter += 1;
-        document.getElementById('moveCounter').innerText = moveCounter;
-        drawTransformedVector();
-    });
-
-    document.getElementById('resetButton').addEventListener('click', () => {
-        const points = generateValidPoints();
-        bluePoint = points.bluePoint;
-        redPoint = points.redPoint;
-        solution = points.solution;
-        
-        unitVectorX = { ...initialUnitVectorX };
-        unitVectorY = { ...initialUnitVectorY };
-        moveCounter = 0;
-        gameWon = false;
-        gameStarted = false;
-        elapsedTime = 0;
-        isPaused = false;
-        isShowingInstructions = false;
-        isShowingSolution = false;
-        
-        document.getElementById('goButton').disabled = false;
-        document.getElementById('pauseButton').disabled = false;
-        document.getElementById('moveCounter').innerText = moveCounter;
-        document.getElementById('winMessage').innerText = '';
-        document.getElementById('timer').innerText = `Timer: ${elapsedTime} seconds`;
-        document.getElementById('instructionsOverlay').style.display = 'none';
-        document.getElementById('solutionOverlay').style.display = 'none';
-        
-        draw();
-        stopTimer();
-        startTimer();
-    });
-
-    document.getElementById('pauseButton').addEventListener('click', () => {
-        if (!gameWon) {
-            togglePause();
-        }
-    });
 
     function togglePause() {
         if (gameWon) return;
@@ -444,14 +428,95 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
+    // Button event listeners
+    document.getElementById('howToPlayButton').addEventListener('click', toggleInstructions);
+    document.getElementById('backToGameButton').addEventListener('click', toggleInstructions);
+    document.getElementById('solveButton').addEventListener('click', toggleSolution);
+    document.getElementById('backFromSolutionButton').addEventListener('click', toggleSolution);
+
+    document.getElementById('goButton').addEventListener('click', () => {
+        if (gameWon || isShowingInstructions || isShowingSolution) return;
+        if (!gameStarted) {
+            gameStarted = true;
+            draw();
+            startTimer();
+        }
+        moveCounter += 1;
+        document.getElementById('moveCounter').innerText = moveCounter;
+        drawTransformedVector();
+    });
+
+                              document.getElementById('resetButton').addEventListener('click', () => {
+        // Generate new points and reset game state
+        const points = generateValidPoints();
+        bluePoint = points.bluePoint;
+        redPoint = points.redPoint;
+        solution = points.solution;
+        
+        // Reset vectors
+        unitVectorX = { ...initialUnitVectorX };
+        unitVectorY = { ...initialUnitVectorY };
+        
+        // Reset game state
+        moveCounter = 0;
+        gameWon = false;
+        gameStarted = false;
+        elapsedTime = 0;
+        isPaused = false;
+        isShowingInstructions = false;
+        isShowingSolution = false;
+        
+        // Reset UI elements
+        document.getElementById('goButton').disabled = false;
+        document.getElementById('pauseButton').disabled = false;
+        document.getElementById('moveCounter').innerText = moveCounter;
+        document.getElementById('winMessage').innerText = '';
+        document.getElementById('timer').innerText = `Timer: ${elapsedTime} seconds`;
+        document.getElementById('instructionsOverlay').style.display = 'none';
+        document.getElementById('solutionOverlay').style.display = 'none';
+        document.getElementById('pauseButton').innerText = 'Pause';
+        
+        // Reset display
+        draw();
+        stopTimer();
+        startTimer();
+    });
+
+    document.getElementById('pauseButton').addEventListener('click', () => {
+        if (!gameWon) {
+            togglePause();
+        }
+    });
+
     function disableButtonsAfterWin() {
         document.getElementById('goButton').disabled = true;
         document.getElementById('pauseButton').disabled = true;
     }
 
-    // Prevent default touch behaviors
-    document.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
-    document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+    // Mobile touch event prevention
+    document.addEventListener('touchstart', (e) => {
+        if (e.target === canvas) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    document.addEventListener('touchmove', (e) => {
+        if (e.target === canvas) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    // Handle window resize
+    function handleResize() {
+        const displayWidth = Math.min(600, window.innerWidth - 40);
+        const scale = displayWidth / canvas.width;
+        
+        canvas.style.width = `${displayWidth}px`;
+        canvas.style.height = `${canvas.height * scale}px`;
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
 
     // Initialize game
     draw();
