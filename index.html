@@ -4,58 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Transformation</title>
-    <style>
-        body {
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        .game-info {
-            text-align: center;
-            margin: 10px 0;
-        }
-        .button-container {
-            margin: 10px 0;
-        }
-        button {
-            margin: 0 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        button:disabled {
-            background-color: #cccccc;
-        }
-        canvas {
-            border: 1px solid black;
-            margin-top: 20px;
-        }
-        .overlay {
-            display: none;
-            position: absolute;
-            background: white;
-            padding: 20px;
-            border: 1px solid black;
-            max-width: 80%;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <h1>Interactive Transformation</h1>
     <div class="game-info">
-        <p>Moves: <span id="moveCounter">0</span></p>
-        <p id="timer">Timer: 0 seconds</p>
+        <span>Moves: <span id="moveCounter">0</span></span>
+        <span id="timer">Timer: 0 seconds</span>
         <p id="winMessage"></p>
     </div>
     <div class="button-container">
@@ -65,9 +22,10 @@
         <button id="pauseButton">Pause</button>
         <button id="solveButton">Solve</button>
     </div>
-    <canvas id="gameCanvas" width="600" height="600" style="border: 1px solid black;"></canvas>    <div id="instructionsOverlay" class="overlay">
+    <canvas id="gameCanvas"></canvas>
+    <div id="instructionsOverlay" class="overlay">
         <h2>How to Play</h2>
-        <p>This game helps you understand linear transformations:</p>
+        <p>Transform the blue vector to reach the red point:</p>
         <ol>
             <li>The blue point represents your starting vector</li>
             <li>The red point is your target</li>
@@ -78,8 +36,14 @@
         <button id="backToGameButton">Back to Game</button>
     </div>
     <div id="solutionOverlay" class="overlay">
-        <div id="solutionContent"></div>
+        <div id="equationContainer">
+            <div id="equation"></div>
+            <div id="equationText"></div>
+            <div id="solutionText"></div>
+            <div id="vectorMapping"></div>
+        </div>
         <button id="backFromSolutionButton">Back to Game</button>
     </div>
+    <script src="main.js"></script>
 </body>
 </html>
