@@ -1,16 +1,17 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    const canvas = document.getElementById('gameCanvas');
+   const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     
-    // Set fixed canvas size
+    // IMPORTANT: Add these exact values
     canvas.width = 600;
     canvas.height = 600;
-    
-    // Game state variables
-    let origin = { x: canvas.width / 2, y: canvas.height / 2 };
+    const width = canvas.width;
+    const height = canvas.height;
+    const baseVectorLength = 50;
+    let origin = { x: width / 2, y: height / 2 };
     let unitSize = Math.min(canvas.width, canvas.height) / 20;
-    const initialUnitVectorX = { x: unitSize, y: 0 };
-    const initialUnitVectorY = { x: 0, y: -unitSize };
+    const initialUnitVectorX = { x: baseVectorLength, y: 0 };
+    const initialUnitVectorY = { x: 0, y: -baseVectorLength };
     let unitVectorX = { ...initialUnitVectorX };
     let unitVectorY = { ...initialUnitVectorY };
 
@@ -78,41 +79,38 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Coordinate conversion functions
     function gridToCanvas(point) {
         return {
-            x: origin.x + point.x * unitSize,
-            y: origin.y - point.y * unitSize
+            x: origin.x + point.x * baseVectorLength,
+            y: origin.y - point.y * baseVectorLength
         };
     }
-
+    
     function canvasToGrid(point) {
         return {
-            x: Math.round((point.x - origin.x) / unitSize),
-            y: Math.round((origin.y - point.y) / unitSize)
+            x: Math.round((point.x - origin.x) / baseVectorLength),
+            y: Math.round((origin.y - point.y) / baseVectorLength)
         };
     }
 
                               // Drawing functions
     function drawGrid() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, width, height);
         ctx.strokeStyle = 'lightgray';
-
+        
         // Draw grid lines
-        for (let i = -10; i <= 10; i++) {
-            const linePos = i * unitSize;
-            
-            // Vertical lines
+        for (let i = -Math.ceil(width / (2 * baseVectorLength)); i <= Math.ceil(width / (2 * baseVectorLength)); i++) {
             ctx.beginPath();
-            ctx.moveTo(origin.x + linePos, 0);
-            ctx.lineTo(origin.x + linePos, canvas.height);
+            ctx.moveTo(origin.x + i * baseVectorLength, 0);
+            ctx.lineTo(origin.x + i * baseVectorLength, height);
             ctx.stroke();
-
-            // Horizontal lines
+        }
+    
+        for (let j = -Math.ceil(height / (2 * baseVectorLength)); j <= Math.ceil(height / (2 * baseVectorLength)); j++) {
             ctx.beginPath();
-            ctx.moveTo(0, origin.y + linePos);
-            ctx.lineTo(canvas.width, origin.y + linePos);
+            ctx.moveTo(0, origin.y + j * baseVectorLength);
+            ctx.lineTo(width, origin.y + j * baseVectorLength);
             ctx.stroke();
         }
     }
-
     function drawAxes() {
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 2;
