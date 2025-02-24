@@ -1,33 +1,39 @@
 body {
     margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-}
-
-.container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 800px;
-    width: 100%;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
     padding: 20px;
-    box-sizing: border-box;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
 }
 
 .game-info {
     text-align: center;
     margin: 10px 0;
+    font-size: 18px;
+}
+
+.game-info span {
+    margin: 0 15px;
+}
+
+#winMessage {
+    color: #4CAF50;
+    font-weight: bold;
+    margin: 10px 0;
 }
 
 .button-container {
+    margin: 15px 0;
     display: flex;
     gap: 10px;
-    margin: 15px 0;
     flex-wrap: wrap;
     justify-content: center;
 }
@@ -52,75 +58,60 @@ button:disabled {
     cursor: not-allowed;
 }
 
-.canvas-container {
-    position: relative;
-    width: 100%;
-    max-width: 600px;
-    aspect-ratio: 1;
-}
-
 canvas {
-    width: 100%;
-    height: 100%;
     border: 1px solid black;
+    background-color: white;
+    touch-action: none;
+    margin: 20px 0;
+    max-width: 100%;
+    height: auto;
 }
 
 .overlay {
     display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid black;
-    z-index: 10;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    z-index: 1000;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }
 
-.overlay-content {
-    padding: 20px;
+#equationContainer {
     text-align: center;
-}
-
-.instructions-text {
-    text-align: left;
-    margin: 20px auto;
-    max-width: 80%;
-}
-
-.instructions-text ol {
-    margin-top: 10px;
-}
-
-.instructions-text li {
-    margin: 10px 0;
-}
-
-#solutionContent {
     margin: 20px 0;
+    font-size: 18px;
 }
 
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-    .container {
+    body {
         padding: 10px;
     }
 
     .button-container {
         flex-direction: column;
-        width: 100%;
+        align-items: stretch;
     }
 
     button {
-        width: 100%;
         margin: 5px 0;
     }
 
-    .canvas-container {
-        width: 95%;
+    canvas {
+        width: 100%;
+        height: auto;
     }
 
-    .overlay-content {
+    .overlay {
+        padding: 15px;
         font-size: 14px;
-        padding: 10px;
     }
 }
