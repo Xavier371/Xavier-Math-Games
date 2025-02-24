@@ -1,19 +1,25 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-   const canvas = document.getElementById('gameCanvas');
+    const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-    
-    // IMPORTANT: Add these exact values
+
+    // CRITICAL: Set these exact dimensions and values
     canvas.width = 600;
     canvas.height = 600;
     const width = canvas.width;
     const height = canvas.height;
     const baseVectorLength = 50;
     let origin = { x: width / 2, y: height / 2 };
-    let unitSize = Math.min(canvas.width, canvas.height) / 20;
+
+    // Initialize vectors with baseVectorLength
     const initialUnitVectorX = { x: baseVectorLength, y: 0 };
     const initialUnitVectorY = { x: 0, y: -baseVectorLength };
     let unitVectorX = { ...initialUnitVectorX };
     let unitVectorY = { ...initialUnitVectorY };
+
+    // Add this CSS directly to the canvas
+    canvas.style.border = '1px solid black';
+    canvas.style.width = '600px';
+    canvas.style.height = '600px';
 
     // Control variables
     let dragging = null;
