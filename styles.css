@@ -74,14 +74,47 @@ canvas {
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    padding: 30px;
+    padding: 40px;
     border: 2px solid #4CAF50;
     border-radius: 10px;
     z-index: 1000;
-    max-width: 90%;
+    width: 80%;
+    max-width: 800px;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.instruction-content {
+    margin: 20px 0;
+}
+
+.instruction-text {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.instruction-text ol {
+    padding-left: 25px;
+    margin-bottom: 30px;
+}
+
+.instruction-text li {
+    margin-bottom: 12px;
+}
+
+.gif-container {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.tutorial-gif {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 #equationContainer {
@@ -90,7 +123,6 @@ canvas {
     font-size: 18px;
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
     body {
         padding: 10px;
@@ -105,13 +137,16 @@ canvas {
         margin: 5px 0;
     }
 
-    canvas {
-        width: 100%;
-        height: auto;
+    .overlay {
+        width: 90%;
+        padding: 20px;
     }
 
-    .overlay {
-        padding: 15px;
-        font-size: 14px;
+    .instruction-text {
+        font-size: 16px;
+    }
+
+    .tutorial-gif {
+        max-width: 100%;
     }
 }
