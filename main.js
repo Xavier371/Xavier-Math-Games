@@ -301,19 +301,34 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 }
 
-    function handlePointerEnd() {
-        dragging = null;
-    }
+    function handlePointerEnd(event) {
+    event.preventDefault();  // Add this line
+    dragging = null;
+    // Force a redraw to ensure everything is updated
+    draw();
+}
 
     // Add event listeners for both mouse and touch
    // Replace your existing event listeners with these
     canvas.addEventListener('mousedown', handlePointerStart);
-    canvas.addEventListener('touchstart', handlePointerStart, { passive: false });
     canvas.addEventListener('mousemove', handlePointerMove);
-    canvas.addEventListener('touchmove', handlePointerMove, { passive: false });
     canvas.addEventListener('mouseup', handlePointerEnd);
+    canvas.addEventListener('mouseleave', handlePointerEnd);
+    
+    // Touch event handlers with proper options
+    canvas.addEventListener('touchstart', handlePointerStart, { passive: false });
+    canvas.addEventListener('touchmove', handlePointerMove, { passive: false });
     canvas.addEventListener('touchend', handlePointerEnd, { passive: false });
+    
+    // Add these two new touch event listeners
     canvas.addEventListener('touchcancel', handlePointerEnd, { passive: false });
+    canvas.addEventListener('touchleave', handlePointerEnd, { passive: false });
+    
+    // Also add this to prevent any potential touch issues
+    canvas.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        return false;
+    }, { passive: false });
 
     // Game control functions
     function checkWinCondition(transformedPoint) {
