@@ -26,7 +26,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let isPaused = false;
     let isShowingInstructions = false;
     let isShowingSolution = false;
-
+    
+    function getScaledPoint(event, rect) {
+    let x, y;
+    const scaleX = canvas.width / canvas.clientWidth;
+    const scaleY = canvas.height / canvas.clientHeight;
+    
+    if (event.type.includes('touch')) {
+        const touch = event.touches[0];
+        x = (touch.clientX - rect.left) * scaleX;
+        y = (touch.clientY - rect.top) * scaleY;
+    } else {
+        x = (event.clientX - rect.left) * scaleX;
+        y = (event.clientY - rect.top) * scaleY;
+    }
+    
+    return { x, y };
+}
     // Point generation functions
     function getRandomPoint() {
         const min = -5;
@@ -253,67 +269,51 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
                               // Event handlers for both mouse and touch
     function handlePointerStart(event) {
-        event.preventDefault();
-        if (gameWon || isPaused) return;
+    event.preventDefault();
+    if (gameWon || isPaused) return;
 
-        const rect = canvas.getBoundingClientRect();
-        let x, y;
-        
-        if (event.type === 'touchstart') {
-            x = event.touches[0].clientX - rect.left;
-            y = event.touches[0].clientY - rect.top;
-        } else {
-            x = event.clientX - rect.left;
-            y = event.clientY - rect.top;
-        }
+    const rect = canvas.getBoundingClientRect();
+    const point = getScaledPoint(event, rect);
 
-        const clickPoint = { x, y };
-
-        if (isOnVector(clickPoint, unitVectorX)) {
-            dragging = 'unitVectorX';
-        } else if (isOnVector(clickPoint, unitVectorY)) {
-            dragging = 'unitVectorY';
-        }
+    if (isOnVector(point, unitVectorX)) {
+        dragging = 'unitVectorX';
+    } else if (isOnVector(point, unitVectorY)) {
+        dragging = 'unitVectorY';
     }
+}
 
     function handlePointerMove(event) {
-        event.preventDefault();
-        if (dragging && !isPaused) {
-            const rect = canvas.getBoundingClientRect();
-            let x, y;
-            
-            if (event.type === 'touchmove') {
-                x = event.touches[0].clientX - rect.left;
-                y = event.touches[0].clientY - rect.top;
-            } else {
-                x = event.clientX - rect.left;
-                y = event.clientY - rect.top;
-            }
+    event.preventDefault();
+    if (dragging && !isPaused) {
+        const rect = canvas.getBoundingClientRect();
+        const point = getScaledPoint(event, rect);
+        
+        const gridPoint = canvasToGrid(point);
+        const snappedX = Math.round(gridPoint.x) * baseVectorLength;
+        const snappedY = Math.round(gridPoint.y) * -baseVectorLength;
 
-            const gridPoint = canvasToGrid({ x, y });
-            const snappedX = Math.round(gridPoint.x) * baseVectorLength;
-            const snappedY = Math.round(gridPoint.y) * -baseVectorLength;
-
-            if (dragging === 'unitVectorX') {
-                unitVectorX = { x: snappedX, y: snappedY };
-            } else if (dragging === 'unitVectorY') {
-                unitVectorY = { x: snappedX, y: snappedY };
-            }
-            draw();
+        if (dragging === 'unitVectorX') {
+            unitVectorX = { x: snappedX, y: snappedY };
+        } else if (dragging === 'unitVectorY') {
+            unitVectorY = { x: snappedX, y: snappedY };
         }
+        draw();
     }
+}
 
     function handlePointerEnd() {
         dragging = null;
     }
 
     // Add event listeners for both mouse and touch
+   // Replace your existing event listeners with these
     canvas.addEventListener('mousedown', handlePointerStart);
     canvas.addEventListener('touchstart', handlePointerStart, { passive: false });
     canvas.addEventListener('mousemove', handlePointerMove);
     canvas.addEventListener('touchmove', handlePointerMove, { passive: false });
     canvas.addEventListener('mouseup', handlePointerEnd);
-    canvas.addEventListener('touchend', handlePointerEnd);
+    canvas.addEventListener('touchend', handlePointerEnd, { passive: false });
+    canvas.addEventListener('touchcancel', handlePointerEnd, { passive: false });
 
     // Game control functions
     function checkWinCondition(transformedPoint) {
@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         drawTransformedVector();
     });
 
-                              document.getElementById('resetButton').addEventListener('click', () => {
+        document.getElementById('resetButton').addEventListener('click', () => {
         // Generate new points and reset game state
         const points = generateValidPoints();
         bluePoint = points.bluePoint;
