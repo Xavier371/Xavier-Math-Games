@@ -12,6 +12,7 @@ body {
 h1 {
     color: #333;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .game-info {
@@ -22,6 +23,7 @@ h1 {
 
 .game-info span {
     margin: 0 15px;
+    display: inline-block;
 }
 
 #winMessage {
@@ -47,6 +49,7 @@ button {
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s;
+    min-width: 100px;
 }
 
 button:hover {
@@ -65,6 +68,7 @@ canvas {
     margin: 20px 0;
     max-width: 100%;
     height: auto;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .overlay {
@@ -123,23 +127,49 @@ canvas {
     font-size: 18px;
 }
 
+/* Solution overlay specific styles */
+#solutionOverlay {
+    text-align: center;
+}
+
+#equation, #equationText, #vectorMapping {
+    margin: 20px 0;
+}
+
+/* Mobile responsiveness */
 @media (max-width: 768px) {
     body {
         padding: 10px;
     }
 
+    h1 {
+        font-size: 24px;
+    }
+
+    .game-info {
+        font-size: 16px;
+    }
+
+    .game-info span {
+        margin: 5px;
+    }
+
     .button-container {
         flex-direction: column;
         align-items: stretch;
+        gap: 5px;
     }
 
     button {
         margin: 5px 0;
+        padding: 12px 20px;
+        width: 100%;
     }
 
     .overlay {
         width: 90%;
         padding: 20px;
+        max-height: 80vh;
     }
 
     .instruction-text {
@@ -148,5 +178,30 @@ canvas {
 
     .tutorial-gif {
         max-width: 100%;
+    }
+
+    canvas {
+        margin: 10px 0;
+        touch-action: none;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .overlay {
+        background: #333;
+        color: #fff;
+        border-color: #4CAF50;
+    }
+
+    .tutorial-gif {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 }
