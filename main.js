@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let unitVectorY = { ...initialUnitVectorY };
 
     // Game state variables
+    let isFirstGame = true;
     let dragging = null;
     let moveCounter = 0;
     let gameWon = false;
@@ -44,7 +45,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
     return { x, y };
 }
     // Point generation functions
+    
+
+// Replace your existing getRandomPoint function with this:
     function getRandomPoint() {
+        if (isFirstGame) {
+            // Starting positions for first game
+            const startingPoints = [
+                { x: 1, y: 1 },
+                { x: 1, y: -1 },
+                { x: -1, y: 1 },
+                { x: -1, y: -1 }
+            ];
+            // Randomly select one of the four starting points
+            const randomIndex = Math.floor(Math.random() * startingPoints.length);
+            isFirstGame = false; // Set to false so future points are random
+            return startingPoints[randomIndex];
+        }
+    
+        // Original random point generation for subsequent games
         const min = -5;
         const max = 5;
         let x, y;
@@ -506,7 +525,10 @@ function isNearVectorLine(point, start, end) {
         drawTransformedVector();
     });
 
-        document.getElementById('resetButton').addEventListener('click', () => {
+    document.getElementById('resetButton').addEventListener('click', () => {
+    // Add this line to ensure the next game uses random points
+        isFirstGame = false;
+        
         // Generate new points and reset game state
         const points = generateValidPoints();
         bluePoint = points.bluePoint;
@@ -541,31 +563,31 @@ function isNearVectorLine(point, start, end) {
         stopTimer();
         startTimer();
     });
-
+    
     document.getElementById('pauseButton').addEventListener('click', () => {
         if (!gameWon) {
             togglePause();
         }
     });
-
+    
     function disableButtonsAfterWin() {
         document.getElementById('goButton').disabled = true;
         document.getElementById('pauseButton').disabled = true;
     }
-
+    
     // Mobile touch event prevention
     document.addEventListener('touchstart', (e) => {
         if (e.target === canvas) {
             e.preventDefault();
         }
     }, { passive: false });
-
+    
     document.addEventListener('touchmove', (e) => {
         if (e.target === canvas) {
             e.preventDefault();
         }
     }, { passive: false });
-
+    
     // Handle window resize
     function handleResize() {
         const displayWidth = Math.min(600, window.innerWidth - 40);
@@ -574,10 +596,10 @@ function isNearVectorLine(point, start, end) {
         canvas.style.width = `${displayWidth}px`;
         canvas.style.height = `${canvas.height * scale}px`;
     }
-
+    
     window.addEventListener('resize', handleResize);
     handleResize();
-
+    
     // Initialize game
     draw();
     startTimer();
