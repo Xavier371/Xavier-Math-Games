@@ -15,12 +15,14 @@
         <span id="timer">Timer: 0 seconds</span>
         <p id="winMessage"></p>
     </div>
-    <div class="button-container">
-        <button id="howToPlayButton">How To Play</button>
-        <button id="goButton">Go</button>
-        <button id="resetButton">Reset</button>
-        <button id="pauseButton">Pause</button>
-        <button id="solveButton">Solve</button>
+    <div class="button-container mobile-button-grid">
+        <button id="howToPlayButton" class="full-width">How To Play</button>
+        <div class="button-grid">
+            <button id="goButton">Go</button>
+            <button id="resetButton">Reset</button>
+            <button id="pauseButton">Pause</button>
+            <button id="solveButton">Solve</button>
+        </div>
     </div>
     <canvas id="gameCanvas"></canvas>
     <div id="instructionsOverlay" class="overlay">
