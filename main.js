@@ -259,13 +259,58 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function isOnVector(point, vector) {
-        const vectorPoint = { x: origin.x + vector.x, y: origin.y + vector.y };
-        const distance = Math.sqrt(
-            (point.x - vectorPoint.x) ** 2 + 
-            (point.y - vectorPoint.y) ** 2
-        );
-        return distance < baseVectorLength/5;
+    const vectorPoint = { x: origin.x + vector.x, y: origin.y + vector.y };
+    const distance = Math.sqrt(
+        (point.x - vectorPoint.x) ** 2 + 
+        (point.y - vectorPoint.y) ** 2
+    );
+    // Increase the touch area for mobile devices
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const touchArea = isMobile ? baseVectorLength/2 : baseVectorLength/5;
+    
+    // Also check if we're near the vector's line
+    const nearLine = isNearVectorLine(point, origin, vectorPoint);
+    
+    return distance < touchArea || nearLine;
+}
+
+// Add this new helper function right after isOnVector
+function isNearVectorLine(point, start, end) {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const tolerance = isMobile ? 20 : 10; // Larger tolerance for mobile
+
+    // Calculate the distance from point to the line segment
+    const a = point.x - start.x;
+    const b = point.y - start.y;
+    const c = end.x - start.x;
+    const d = end.y - start.y;
+
+    const dot = a * c + b * d;
+    const len_sq = c * c + d * d;
+    
+    // Find the closest point on the line
+    let param = -1;
+    if (len_sq !== 0) param = dot / len_sq;
+
+    let xx, yy;
+
+    if (param < 0) {
+        xx = start.x;
+        yy = start.y;
+    } else if (param > 1) {
+        xx = end.x;
+        yy = end.y;
+    } else {
+        xx = start.x + param * c;
+        yy = start.y + param * d;
     }
+
+    const dx = point.x - xx;
+    const dy = point.y - yy;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    return distance < tolerance;
+}
 
                               // Event handlers for both mouse and touch
     function handlePointerStart(event) {
