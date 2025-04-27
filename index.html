@@ -47,6 +47,14 @@
         .game-link:hover {
             background-color: #45a049;
         }
+
+        /* Only affect the 3D games button group */
+        .button-group {
+            display: flex;
+            gap: 10px; /* Space between the 3D buttons */
+            flex-wrap: wrap;
+            margin-top: 10px; /* Match other buttons' margin-top */
+        }
     </style>
 </head>
 <body>
@@ -97,15 +105,18 @@
         </p>
         <a href="https://xavier371.github.io/GraphTheMatch/" class="game-link">Graph the Match</a>
     </div>
+
     <div class="game-container">
-    <h2>Classic Games, Reimagined in 3D</h2>
-    <p>
-        Challenge yourself with classic games Tic Tac Toe, Connect 4 and Snake,
-        this time with an added layer of dimensionality.
-    </p>
-    <a href="https://xavier371.github.io/3D-tic-tac-toe/" class="game-link">3D Tic Tac Toe</a>
-    <a href="https://xavier371.github.io/3D-connect4/" class="game-link">3D Connect 4</a>
-    <a href="https://xavier371.github.io/3D-snake/" class="game-link">3D Snake</a>
-</div>
+        <h2>Classic Games, Reimagined in 3D</h2>
+        <p>
+            Challenge yourself with classic games — Tic Tac Toe, Connect 4, and Snake — 
+            this time with an exciting third dimension!
+        </p>
+        <div class="button-group">
+            <a href="https://xavier371.github.io/3D-tic-tac-toe/" class="game-link">3D Tic Tac Toe</a>
+            <a href="https://xavier371.github.io/3D-connect4/" class="game-link">3D Connect 4</a>
+            <a href="https://xavier371.github.io/3D-snake/" class="game-link">3D Snake</a>
+        </div>
+    </div>
 </body>
 </html>
