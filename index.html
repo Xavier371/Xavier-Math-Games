@@ -4,147 +4,398 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xavier Math Games</title>
-    <!-- Add this meta description tag -->
     <meta name="description" content="Play interactive math games including Catch the Point, Triangle Push, Find the Basis, Graph the Match, and 3D classics. Fun mathematical challenges for all levels.">
-    
-    <!-- Also add these for social sharing -->
-    <meta property="og:title" content="Xavier Math Games">
-    <meta property="og:description" content="Play interactive math games including Catch the Point, Triangle Push, Find the Basis, Graph the Match, and 3D classics. Fun mathematical challenges for all levels.">
-    <meta property="og:url" content="https://xaviermathgames.com">
+    <meta property="og:type" content="website">
     <style>
+        :root {
+            --page-max: 1100px;
+            --card-bg: #ffffff;
+            --page-bg: #d9dde3; /* lighter grey */
+            --text: #1f2937; /* dark slate */
+            --accent: #1f3a8a; /* dark blue */
+            --button: #1f3a8a;
+            --button-hover: #172a63;
+            --radius: 8px;
+        }
+
+        * { box-sizing: border-box; }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
+            font-family: "Times New Roman", Times, serif;
+            max-width: var(--page-max);
             margin: 0 auto;
             padding: 20px;
             line-height: 1.6;
-            background-color: #f5f5f5;
-        }
-
-        .game-container {
-            margin-bottom: 40px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: var(--page-bg);
+            color: var(--text);
         }
 
         h1 {
             text-align: center;
-            color: #333;
-            margin-bottom: 40px;
+            color: #000000; /* black */
+            margin-bottom: 32px;
+            letter-spacing: 0.2px;
+            text-shadow: none;
         }
 
         h2 {
-            color: #2c5282;
+            color: var(--accent);
+            margin: 0 0 8px 0;
         }
 
-        .game-link {
+        a.game-link {
             display: inline-block;
             margin-top: 10px;
-            padding: 8px 16px;
-            background-color: #4CAF50;
-            color: white;
+            padding: 10px 16px;
+            background-color: var(--button);
+            color: #ffffff;
             text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+            border-radius: 0; /* perfect rectangle */
+            border: 1px solid #162a63; /* crisp edge */
+            box-shadow: 0 2px 0 #0f1f4a; /* subtle depth */
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.02s ease;
+            font-weight: 600;
         }
 
-        .game-link:hover {
-            background-color: #45a049;
+        a.game-link:hover { background-color: var(--button-hover); box-shadow: 0 3px 0 #0f1f4a; }
+        a.game-link:active { transform: translateY(1px); box-shadow: 0 1px 0 #0f1f4a; }
+
+        /* Desktop/tablet list layout */
+        .games-list { display: grid; gap: 36px; }
+
+        .game-item {
+            background: transparent; /* remove outer card */
+            border: none;
+            box-shadow: none;
+            padding: 0;
         }
 
-        /* Only affect the 3D games button group */
+        .game-content {
+            display: grid;
+            grid-template-columns: 1fr 360px; /* text left, image right */
+            gap: 32px;
+            align-items: center;
+        }
+
+        /* Make only the text area look like a card */
+        .game-text {
+            background: var(--card-bg);
+            border: 1px solid #d7dbe3; /* softer grey */
+            border-radius: 0; /* perfect rectangle */
+            box-shadow: 0 6px 16px rgba(15, 27, 64, 0.08);
+            padding: 20px;
+        }
+
+        .game-text h2 { margin: 0 0 12px 0; }
+        .game-text p { margin: 0 0 10px 0; }
+        .game-text p:last-child { margin-bottom: 0; }
+
+        .game-media { align-self: center; }
+
+        .game-media figure {
+            margin: 0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        .game-media img {
+            width: 100%;
+            height: auto; /* show full image */
+            object-fit: contain;
+            border-radius: 10px;
+            border: none;
+            display: block;
+            background: transparent;
+            box-shadow: 0 10px 24px rgba(17, 34, 76, 0.10);
+        }
+
+        /* Hide captions under right-side desktop tiles (keep mobile gallery captions) */
+        .games-list .game-media figcaption { display: none; }
+
+        .game-media figcaption {
+            font-size: 12px;
+            color: #5b6476;
+            margin-top: 6px;
+            text-align: center;
+        }
+
+        /* Button group styling for 3D games links */
         .button-group {
             display: flex;
-            gap: 10px; /* Space between the 3D buttons */
+            gap: 10px;
             flex-wrap: wrap;
-            margin-top: 10px; /* Match margin style */
+            margin-top: 10px;
+        }
+
+        /* Mobile gallery (hidden on desktop) */
+        .mobile-gallery {
+            display: none;
+            margin-bottom: 24px;
+            background-color: var(--page-bg); /* match phones bg */
+            padding: 0 0 1px 0;
+        }
+
+        .mobile-gallery a {
+            color: inherit;
+            text-decoration: none;
+            display: block; /* whole tile clickable */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .mobile-gallery figure { margin: 0; }
+
+        .mobile-gallery img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 10px;
+            border: none;
+            display: block;
+            background: #eef1f6;
+            box-shadow: 0 8px 18px rgba(17, 34, 76, 0.08);
+        }
+
+        .mobile-gallery figcaption {
+            font-size: 12px;
+            color: #5b6476;
+            margin-top: 6px;
+            text-align: center;
+        }
+
+        @media (max-width: 980px) {
+            .game-content { grid-template-columns: 1fr 320px; }
+            .game-media img { height: auto; }
+        }
+
+        @media (max-width: 640px) {
+            /* Show the two-column image gallery on phones */
+            .mobile-gallery {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            /* Hide detailed list on phones */
+            .games-list { display: none; }
+
+            /* Keep the detailed sections but stack inside each card */
+            .game-content { grid-template-columns: 1fr; }
+            .game-media img { height: auto; aspect-ratio: 16 / 9; }
         }
     </style>
 </head>
 <body>
     <h1>Xavier Math Games</h1>
 
-    <div class="game-container">
-        <h2>Find the Basis</h2>
-        <p>
-            Vectors <em>i</em> and <em>j</em> form a unit square, and span 2D space. 
-            Drag and drop <em>i'</em> and <em>j'</em> to scale, rotate, and flip the unit square, and 2D space-
-            so that the blue point falls on the red. Click solve to see how to get a (non unique) solution, and help for more intuition.
-           
-        </p>
-        <a href="https://xavier371.github.io/FindTheBasis/" class="game-link">Find the Basis</a>
-    </div>
+    <!-- Mobile-first two-column image gallery with captions -->
+    <section class="mobile-gallery" aria-label="Games quick gallery">
+        <a href="https://xavier371.github.io/FindTheBasis/" target="_blank" rel="noopener noreferrer">
+            <figure>
+                <img src="find-the-basis.jpg" alt="Find the Basis game thumbnail">
+                <figcaption>Find the Basis</figcaption>
+            </figure>
+        </a>
+        <a href="https://xavier371.github.io/GraphTheMatch/" target="_blank" rel="noopener noreferrer">
+            <figure>
+                <img src="gtm.jpg" alt="Graph the Match game thumbnail">
+                <figcaption>Graph the Match</figcaption>
+            </figure>
+        </a>
+        <a href="https://xavier371.github.io/FM-Calculator/" target="_blank" rel="noopener noreferrer">
+            <figure>
+                <img src="FM.jpg" alt="Financial Calculator app thumbnail">
+                <figcaption>FM Calculator</figcaption>
+            </figure>
+        </a>
+        <a href="https://xavier371.github.io/Laser-Jump/" target="_blank" rel="noopener noreferrer">
+            <figure>
+                <img src="LJ.jpg" alt="Laser Jump game thumbnail">
+                <figcaption>Laser Jump</figcaption>
+            </figure>
+        </a>
+        <a href="https://xavier371.github.io/Chase-the-Point/" target="_blank" rel="noopener noreferrer">
+            <figure>
+                <img src="CTP.jpg" alt="Catch the Point game thumbnail">
+                <figcaption>Catch the Point</figcaption>
+            </figure>
+        </a>
+        <a href="https://xavier371.github.io/3D-connect4/" target="_blank" rel="noopener noreferrer">
+            <figure>
+                <img src="3d.jpg" alt="3D Connect 4 game thumbnail">
+                <figcaption>3D Connect 4</figcaption>
+            </figure>
+        </a>
+        <a href="https://xavier371.github.io/3D-tic-tac-toe/" target="_blank" rel="noopener noreferrer">
+            <figure>
+                <img src="ttt.jpg" alt="3D Tic Tac Toe game thumbnail">
+                <figcaption>3D Tic Tac Toe</figcaption>
+            </figure>
+        </a>
+        <a href="https://xavier371.github.io/3D-snake/" target="_blank" rel="noopener noreferrer">
+            <figure>
+                <img src="snk.jpg" alt="3D Snake game thumbnail">
+                <figcaption>3D Snake</figcaption>
+            </figure>
+        </a>
+        <a href="https://xavier371.github.io/Triangle-Chess/" target="_blank" rel="noopener noreferrer">
+            <figure>
+                <img src="tc.jpg" alt="Triangle Chess game thumbnail">
+                <figcaption>Triangle Chess</figcaption>
+            </figure>
+        </a>
+    </section>
 
-    <div class="game-container">
-        <h2>Graph the Match</h2>
-        <p>
-            The red points are students, and the blue points are Universities. 
-            The edge weights represent how well each student would fit at each University.
-            Highlight the set of edges that maximize the score for everyone involved. Press check
-            to see if your matching is optimal.
-        </p>
-        <a href="https://xavier371.github.io/GraphTheMatch/" class="game-link">Graph the Match</a>
-    </div>
+    <!-- Desktop/tablet detailed list with text on the left and image on the right -->
+    <section class="games-list" aria-label="Games list">
+        <article class="game-item">
+            <div class="game-content">
+                <div class="game-text">
+                    <h2>Find the Basis</h2>
+                    <p>
+                        Vectors <em>i</em> and <em>j</em> form a unit square, and span 2D space.
+                        Drag and drop <em>i'</em> and <em>j'</em> to scale, rotate, and flip the unit square, and 2D space—
+                        so that the blue point falls on the red. Click solve to see how to get a (non-unique) solution,
+                        and help for more intuition.
+                    </p>
+                    <a href="https://xavier371.github.io/FindTheBasis/" class="game-link" target="_blank" rel="noopener noreferrer">Find the Basis</a>
+                </div>
+                <div class="game-media">
+                    <figure>
+                        <img src="find-the-basis.jpg" alt="Find the Basis game thumbnail">
+                        <figcaption>Find the Basis</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </article>
 
-    <div class="game-container">
-        <h2>Financial Calculator</h2>
-        <p>
-            An interactive financial calculator for analyzing annuities, loans, bonds, and the time value of money.
-            Adjust parameters to visualize how cash flows are accumulated and discounted in real time.
-        </p>
-        <a href="https://xavier371.github.io/FM-Calculator/" class="game-link">FM Calculator</a>
-    </div>
-    
-    <div class="game-container">
-        <h2>Laser Jump</h2>
-        <p>
-            Test your reflexes by collecting as many gold coins as possible while avoiding an
-            increasing number of lasers. Press the space bar to jump on computers, or tap while dragging to 
-            jump on mobile devices.
-        </p>
-        <a href="https://xavier371.github.io/Laser-Jump/" class="game-link">Laser Jump</a>
-    </div>
-    
-    <div class="game-container">
-        <h2>Catch the Point</h2>
-        <p>
-            You are the blue point trying to catch the red. 
-            Every move, a random edge is removed. Try to corner the red point 
-            before an edge is removed and the points are separated. Switch to defense mode 
-            to try and evade red, and switch to two players to play with a friend.
-        </p>
-        <a href="https://xavier371.github.io/Chase-the-Point/" class="game-link">Catch the Point</a>
-    </div>
-    
-    <div class="game-container">
-        <h2>Classic Games, Reimagined in 3D</h2>
-        <p>
-            Challenge yourself with classic games Tic Tac Toe, Connect 4 and Snake,
-            this time in three dimensions.
-        </p>
-        <div class="button-group">
-            <a href="https://xavier371.github.io/3D-tic-tac-toe/" class="game-link">3D Tic Tac Toe</a>
-            <a href="https://xavier371.github.io/3D-connect4/" class="game-link">3D Connect 4</a>
-            <a href="https://xavier371.github.io/3D-snake/" class="game-link">3D Snake</a>
-        </div>
-    </div>
-    
-    <div class="game-container">
-        <h2>Triangle Chess</h2>
-        <p>
-            The goal is to promote one of your peices to the opposite end of the board before your opponent. 
-            Every move, a triangle can move one square up, down, left or right. Land on an opposing triangle
-            to capture it. Try to find a path to victory while blocking your opponent.
-        </p>
-        <a href="https://xavier371.github.io/Triangle-Chess/" class="game-link">Triangle Chess</a>
-    </div>
-    
-    
+        <article class="game-item">
+            <div class="game-content">
+                <div class="game-text">
+                    <h2>Graph the Match</h2>
+                    <p>
+                        The red points are students, and the blue points are Universities.
+                        The edge weights represent how well each student would fit at each University.
+                        Highlight the set of edges that maximize the score for everyone involved. Press check
+                        to see if your matching is optimal.
+                    </p>
+                    <a href="https://xavier371.github.io/GraphTheMatch/" class="game-link" target="_blank" rel="noopener noreferrer">Graph the Match</a>
+                </div>
+                <div class="game-media">
+                    <figure>
+                        <img src="gtm.jpg" alt="Graph the Match game thumbnail">
+                        <figcaption>Graph the Match</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </article>
+
+        <article class="game-item">
+            <div class="game-content">
+                <div class="game-text">
+                    <h2>Financial Calculator</h2>
+                    <p>
+                        An interactive financial calculator for analyzing annuities, loans, bonds, and the time value of money.
+                        Adjust parameters to visualize how cash flows are accumulated and discounted in real time.
+                    </p>
+                    <a href="https://xavier371.github.io/FM-Calculator/" class="game-link" target="_blank" rel="noopener noreferrer">FM Calculator</a>
+                </div>
+                <div class="game-media">
+                    <figure>
+                        <img src="FM.jpg" alt="Financial Calculator app thumbnail">
+                        <figcaption>FM Calculator</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </article>
+
+        <article class="game-item">
+            <div class="game-content">
+                <div class="game-text">
+                    <h2>Laser Jump</h2>
+                    <p>
+                        Test your reflexes by collecting as many gold coins as possible while avoiding an
+                        increasing number of lasers. Press the space bar to jump on computers, or tap while dragging to
+                        jump on mobile devices.
+                    </p>
+                    <a href="https://xavier371.github.io/Laser-Jump/" class="game-link" target="_blank" rel="noopener noreferrer">Laser Jump</a>
+                </div>
+                <div class="game-media">
+                    <figure>
+                        <img src="LJ.jpg" alt="Laser Jump game thumbnail">
+                        <figcaption>Laser Jump</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </article>
+
+        <article class="game-item">
+            <div class="game-content">
+                <div class="game-text">
+                    <h2>Catch the Point</h2>
+                    <p>
+                        You are the blue point trying to catch the red.
+                        Every move, a random edge is removed. Try to corner the red point
+                        before an edge is removed and the points are separated. Switch to defense mode
+                        to try and evade red, and switch to two players to play with a friend.
+                    </p>
+                    <a href="https://xavier371.github.io/Chase-the-Point/" class="game-link" target="_blank" rel="noopener noreferrer">Catch the Point</a>
+                </div>
+                <div class="game-media">
+                    <figure>
+                        <img src="CTP.jpg" alt="Catch the Point game thumbnail">
+                        <figcaption>Catch the Point</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </article>
+
+        <article class="game-item">
+            <div class="game-content">
+                <div class="game-text">
+                    <h2>Classic Games, Reimagined in 3D</h2>
+                    <p>
+                        Challenge yourself with classic games Tic Tac Toe, Connect 4 and Snake,
+                        this time in three dimensions.
+                    </p>
+                    <div class="button-group">
+                        <a href="https://xavier371.github.io/3D-tic-tac-toe/" class="game-link" target="_blank" rel="noopener noreferrer">3D Tic Tac Toe</a>
+                        <a href="https://xavier371.github.io/3D-connect4/" class="game-link" target="_blank" rel="noopener noreferrer">3D Connect 4</a>
+                        <a href="https://xavier371.github.io/3D-snake/" class="game-link" target="_blank" rel="noopener noreferrer">3D Snake</a>
+                    </div>
+                </div>
+                <div class="game-media">
+                    <figure>
+                        <img src="3d.jpg" alt="3D classics games thumbnail">
+                        <figcaption>3D Classics</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </article>
+
+        <article class="game-item">
+            <div class="game-content">
+                <div class="game-text">
+                    <h2>Triangle Chess</h2>
+                    <p>
+                        The goal is to promote one of your pieces to the opposite end of the board before your opponent.
+                        Every move, a triangle can move one square up, down, left or right. Land on an opposing triangle
+                        to capture it. Try to find a path to victory while blocking your opponent.
+                    </p>
+                    <a href="https://xavier371.github.io/Triangle-Chess/" class="game-link" target="_blank" rel="noopener noreferrer">Triangle Chess</a>
+                </div>
+                <div class="game-media">
+                    <figure>
+                        <img src="tc.jpg" alt="Triangle Chess game thumbnail">
+                        <figcaption>Triangle Chess</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </article>
+    </section>
+
 </body>
 </html>
-
-
-
