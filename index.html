@@ -94,8 +94,12 @@
         .mobile-gallery { display: none; margin-bottom: 24px; background-color: var(--page-bg); padding: 0 0 1px 0; }
         .mobile-gallery a { color: inherit; text-decoration: none; display: block; -webkit-tap-highlight-color: transparent; }
         .mobile-gallery figure { margin: 0; }
-        .mobile-gallery img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; border: none; display: block; background: #eef1f6; box-shadow: 0 8px 18px rgba(17, 34, 76, 0.08); }
-        .mobile-gallery figcaption { font-size: 12px; color: #5b6476; margin-top: 6px; text-align: center; }
+        .mobile-gallery img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 0; border: none; display: block; background: transparent; box-shadow: none; }
+        .mobile-gallery a:nth-child(1) img,
+        .mobile-gallery a:nth-child(2) img,
+        .mobile-gallery a:nth-child(3) img,
+        .mobile-gallery a:nth-child(4) img { aspect-ratio: 1 / 1.2; object-fit: contain; }
+        .mobile-gallery figcaption { font-size: 12px; color: #374151; margin-top: 4px; text-align: center; }
 
         @media (max-width: 980px) {
             .game-content { grid-template-columns: 1fr 320px; }
@@ -132,10 +136,10 @@
                 <figcaption>Find the Basis</figcaption>
             </figure>
         </a>
-        <a href="https://xavier371.github.io/GraphTheMatch/" target="_blank" rel="noopener noreferrer">
+        <a href="https://xavier371.github.io/3D-connect4/" target="_blank" rel="noopener noreferrer">
             <figure>
-                <img src="gtm.jpg" alt="Graph the Match game thumbnail">
-                <figcaption>Graph the Match</figcaption>
+                <img src="3d.jpg" alt="3D Connect 4 game thumbnail">
+                <figcaption>3D Connect 4</figcaption>
             </figure>
         </a>
         <a href="https://xavier371.github.io/FM-Calculator/" target="_blank" rel="noopener noreferrer">
@@ -144,10 +148,10 @@
                 <figcaption>Financial Calculator</figcaption>
             </figure>
         </a>
-        <a href="https://xavier371.github.io/3D-connect4/" target="_blank" rel="noopener noreferrer">
+        <a href="https://xavier371.github.io/GraphTheMatch/" target="_blank" rel="noopener noreferrer">
             <figure>
-                <img src="3d.jpg" alt="3D Connect 4 game thumbnail">
-                <figcaption>3D Connect 4</figcaption>
+                <img src="gtm.jpg" alt="Graph the Match game thumbnail">
+                <figcaption>Graph the Match</figcaption>
             </figure>
         </a>
         <a href="https://xavier371.github.io/3D-tic-tac-toe/" target="_blank" rel="noopener noreferrer">
@@ -156,10 +160,10 @@
                 <figcaption>3D Tic Tac Toe</figcaption>
             </figure>
         </a>
-        <a href="https://xavier371.github.io/3D-snake/" target="_blank" rel="noopener noreferrer">
+        <a href="https://xavier371.github.io/Slope-Field-Game/" target="_blank" rel="noopener noreferrer">
             <figure>
-                <img src="snk.jpg" alt="3D Snake game thumbnail">
-                <figcaption>3D Snake</figcaption>
+                <img src="slp.jpg" alt="Slope Field Game thumbnail">
+                <figcaption>Slope Field Game</figcaption>
             </figure>
         </a>
         <a href="https://xavier371.github.io/Triangle-Chess/" target="_blank" rel="noopener noreferrer">
@@ -168,10 +172,10 @@
                 <figcaption>Triangle Chess</figcaption>
             </figure>
         </a>
-        <a href="https://xavier371.github.io/Slope-Field-Game/" target="_blank" rel="noopener noreferrer">
+        <a href="https://xavier371.github.io/3D-snake/" target="_blank" rel="noopener noreferrer">
             <figure>
-                <img src="slp.jpg" alt="Slope Field Game thumbnail">
-                <figcaption>Slope Field Game</figcaption>
+                <img src="snk.jpg" alt="3D Snake game thumbnail">
+                <figcaption>3D Snake</figcaption>
             </figure>
         </a>
     </section>
@@ -262,26 +266,6 @@
         <article class="game-item">
             <div class="game-content">
                 <div class="game-text">
-                    <h2>Laser Jump</h2>
-                    <p>
-                        Test your reflexes by collecting as many gold coins as possible while avoiding an
-                        increasing number of lasers. Press the space bar to jump on computers, or tap while dragging to
-                        jump on mobile devices.
-                    </p>
-                    <a href="https://xavier371.github.io/Laser-Jump/" class="game-link" target="_blank" rel="noopener noreferrer">Laser Jump</a>
-                </div>
-                <div class="game-media">
-                    <figure>
-                        <img src="LJ.jpg" alt="Laser Jump game thumbnail">
-                        <figcaption>Laser Jump</figcaption>
-                    </figure>
-                </div>
-            </div>
-        </article>
-
-        <article class="game-item">
-            <div class="game-content">
-                <div class="game-text">
                     <h2>Catch the Point</h2>
                     <p>
                         You are the blue point trying to catch the red.
@@ -295,6 +279,26 @@
                     <figure>
                         <img src="CTP.jpg" alt="Catch the Point game thumbnail">
                         <figcaption>Catch the Point</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </article>
+
+        <article class="game-item">
+            <div class="game-content">
+                <div class="game-text">
+                    <h2>Laser Jump</h2>
+                    <p>
+                        Test your reflexes by collecting as many gold coins as possible while avoiding an
+                        increasing number of lasers. Press the space bar to jump on computers, or tap while dragging to
+                        jump on mobile devices.
+                    </p>
+                    <a href="https://xavier371.github.io/Laser-Jump/" class="game-link" target="_blank" rel="noopener noreferrer">Laser Jump</a>
+                </div>
+                <div class="game-media">
+                    <figure>
+                        <img src="LJ.jpg" alt="Laser Jump game thumbnail">
+                        <figcaption>Laser Jump</figcaption>
                     </figure>
                 </div>
             </div>
@@ -346,5 +350,3 @@
 
 </body>
 </html>
-
-
