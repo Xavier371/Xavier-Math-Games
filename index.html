@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,9 +120,11 @@
             .game-content { grid-template-columns: 1fr 320px; }
             .game-media img { height: auto; }
         }
+        .game-media a { display: block; }
+        .game-media a:hover img { opacity: 0.88; }
+        .game-media img { transition: opacity 0.2s ease; }
+
         @media (max-width: 640px) {
-            .mobile-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-            .games-list { display: none; }
             .game-content { grid-template-columns: 1fr; }
             .game-media img { height: auto; aspect-ratio: 16 / 9; }
         }
@@ -210,7 +213,9 @@
                 </div>
                 <div class="game-media">
                     <figure>
-                        <img src="find-the-basis.jpg" alt="Find the Basis game thumbnail">
+                        <a href="https://xavier371.github.io/FindTheBasis/" target="_blank" rel="noopener noreferrer">
+                            <img src="find-the-basis.jpg" alt="Find the Basis game thumbnail">
+                        </a>
                         <figcaption>Find the Basis</figcaption>
                     </figure>
                 </div>
@@ -231,7 +236,9 @@
                 </div>
                 <div class="game-media">
                     <figure>
-                        <img src="gtm.jpg" alt="Graph the Match game thumbnail">
+                        <a href="https://xavier371.github.io/GraphTheMatch/" target="_blank" rel="noopener noreferrer">
+                            <img src="gtm.jpg" alt="Graph the Match game thumbnail">
+                        </a>
                         <figcaption>Graph the Match</figcaption>
                     </figure>
                 </div>
@@ -250,7 +257,9 @@
                 </div>
                 <div class="game-media">
                     <figure>
-                        <img src="FM.jpg" alt="Financial Calculator app thumbnail">
+                        <a href="https://xavier371.github.io/FM-Calculator/" target="_blank" rel="noopener noreferrer">
+                            <img src="FM.jpg" alt="Financial Calculator app thumbnail">
+                        </a>
                         <figcaption>FM Calculator</figcaption>
                     </figure>
                 </div>
@@ -270,7 +279,9 @@
                 </div>
                 <div class="game-media">
                     <figure>
-                        <img src="slp.jpg" alt="Slope Field Game thumbnail">
+                        <a href="https://xavier371.github.io/Slope-Field-Game/" target="_blank" rel="noopener noreferrer">
+                            <img src="slp.jpg" alt="Slope Field Game thumbnail">
+                        </a>
                         <figcaption>Slope Field Game</figcaption>
                     </figure>
                 </div>
@@ -291,7 +302,9 @@
                 </div>
                 <div class="game-media">
                     <figure>
-                        <img src="CTP.jpg" alt="Catch the Point game thumbnail">
+                        <a href="https://xavier371.github.io/Chase-the-Point/" target="_blank" rel="noopener noreferrer">
+                            <img src="CTP.jpg" alt="Catch the Point game thumbnail">
+                        </a>
                         <figcaption>Catch the Point</figcaption>
                     </figure>
                 </div>
@@ -311,7 +324,9 @@
                 </div>
                 <div class="game-media">
                     <figure>
-                        <img src="LJ.jpg" alt="Laser Jump game thumbnail">
+                        <a href="https://xavier371.github.io/Laser-Jump/" target="_blank" rel="noopener noreferrer">
+                            <img src="LJ.jpg" alt="Laser Jump game thumbnail">
+                        </a>
                         <figcaption>Laser Jump</figcaption>
                     </figure>
                 </div>
@@ -334,7 +349,9 @@
                 </div>
                 <div class="game-media">
                     <figure>
-                        <img src="3d.jpg" alt="3D classics games thumbnail">
+                        <a href="https://xavier371.github.io/3D-connect4/" target="_blank" rel="noopener noreferrer">
+                            <img src="3d.jpg" alt="3D classics games thumbnail">
+                        </a>
                         <figcaption>3D Classics</figcaption>
                     </figure>
                 </div>
@@ -354,7 +371,9 @@
                 </div>
                 <div class="game-media">
                     <figure>
-                        <img src="tc.jpg" alt="Triangle Chess game thumbnail">
+                        <a href="https://xavier371.github.io/Triangle-Chess/" target="_blank" rel="noopener noreferrer">
+                            <img src="tc.jpg" alt="Triangle Chess game thumbnail">
+                        </a>
                         <figcaption>Triangle Chess</figcaption>
                     </figure>
                 </div>
