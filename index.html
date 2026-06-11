@@ -125,7 +125,13 @@
         .game-media img { transition: opacity 0.2s ease; }
 
         @media (max-width: 640px) {
-            .game-content { grid-template-columns: 1fr 140px; gap: 16px; }
+            .games-list { gap: 16px; }
+            .game-content { grid-template-columns: 1fr 100px; gap: 10px; }
+            .game-text { padding: 10px; }
+            .game-text h2 { font-size: 13px; margin-bottom: 5px; }
+            .game-text p { font-size: 11px; line-height: 1.4; margin-bottom: 5px; }
+            a.game-link { font-size: 11px; padding: 5px 8px; margin-top: 5px; }
+            .button-group { gap: 5px; margin-top: 5px; }
             .game-media img { height: auto; }
         }
     </style>
